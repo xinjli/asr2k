@@ -1,0 +1,17 @@
+scipy
+numpy
+panphon
+editdistance
+requests
+tqdm
+pyyaml
+phonepiece
+epitran
+unidecode
+setuptools
+Cython
+kaldiio
+transphone>=1.4.0
+torch
+torchaudio
+lhotse

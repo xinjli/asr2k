@@ -1,6 +1,6 @@
 # ASR2K
 
-This repository will contain our code of our publication at `interspeech 2022`
+This repository contains our code of our publication at `interspeech 2022`
 
 ```
 Li, Xinjian, et al. "ASR2K: Speech Recognition for Around 2000 Languages without Audio" Interspeech 2022. 2022
@@ -10,20 +10,77 @@ We plan to release ASR models for 2k languages (currently 1909 languages). The a
 
 ![asr2k](./arch.png)
 
+## Usage
 
-It has a modular architecture instead of modern end-to-end models
+### Training
 
-As most of the languages do not have any training set (and even test set), it is impossible to create any end-to-end models directly. Instead of building the end-to-end models, We are interested in decomposing the entire model into a sequence of linguistic components. it has a few advantages in this scenario:
+See README in `egs/commonvoice` for a simple recipe example
 
-- some of the components here are relatively less dependent on training resources (e.g: texts are easier to obtain than audios)
-- some of them are already well-defined by linguists (e.g: phonetics, phonology), those domain knowledge can be incorporated into the model through some Bayesian frameworks.
-- language-wise interpolation is easier sometimes (e.g: English and German shares many common phones)
+### Inference
 
-## Model
+Once you trained a model or download one of our pretrained model (not available yet). 
 
-Our model mainly consists of three components: acoustic model, pronunciation model and language model. The acoustic model and pronunciation model have been released separately on Github:
+You should be able to run it using python as follows
 
-- acoustic model: [allosaurus](https://github.com/xinjli/allosaurus)
-- pronunciation model: [transphone](https://github.com/xinjli/transphone)
+```python
+In [1]: from asr2k.app import read_app
+In [2]: app = read_app('eng', './data')
+In [3]: app.predict('utt.wav')
+```
 
-The language model is based on [icefall](https://github.com/k2-fsa/icefall) recipes and [crubadan](https://github.com/kscanne/crubadan) database. We are currently working on releasing the language model and organize all codes into a simple codebase in this repository
+or run inference from bash
+
+```bash
+python -m asr2k.bin.run --lang=eng --lang_dir=./data --input=./test --output=./test
+```
+
+
+## Install
+
+To train a ASR2K model, you need the following packages:
+
+```bash
+# k2
+# https://k2-fsa.github.io/k2/
+# in my env, it is the following
+pip install k2==1.24.4.dev20240223+cpu.torch1.13.1 -f https://k2-fsa.github.io/k2/cpu.html
+
+# lhotse
+pip install git+https://github.com/lhotse-speech/lhotse
+
+# icefall
+git clone https://github.com/k2-fsa/icefall
+cd icefall
+pip install -r requirements.txt
+
+
+# srilm
+# download from http://www.speech.sri.com/projects/srilm/download.html
+# follow the instruction in the INSTALL file in the package
+# in my env, they are
+# 
+# - tar -xvzf srilm-1.7.3.tar.gz
+# - set SRILM variable in Makefile
+# - make
+# - add bin/i686-m64 to your PATH
+# 
+# make sure ngram-count is available in your env
+
+# ASR2k
+# install this package
+pip install -e .
+```
+
+
+## Reference
+
+```
+@inproceedings{li22aa_interspeech,
+  author={Xinjian Li and Florian Metze and David R. Mortensen and Alan W Black and Shinji Watanabe},
+  title={{ASR2K: Speech Recognition for Around 2000 Languages without Audio}},
+  year=2022,
+  booktitle={Proc. Interspeech 2022},
+  pages={4885--4889},
+  doi={10.21437/Interspeech.2022-10712}
+}
+```

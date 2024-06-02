@@ -136,4 +136,5 @@ transphone/pretrained
 scripts/
 notes/
 docs/
-asr2k/
+.DS_Store
+.vscode
